@@ -1,3 +1,9 @@
+// FCAI – Programming 1 – 2022 - Assignment 3.
+// Author1: Sara Walid farouk Mohamed
+// Author2: Howida Adel Abd El-Halim
+// Author3: Hadeer Abdelnasser
+// Teaching Assistant: Afaf Abdelmonem
+
 #include <iostream>
 #include <fstream>
 #include <cstring>

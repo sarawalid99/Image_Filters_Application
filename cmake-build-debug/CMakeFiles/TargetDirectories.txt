@@ -1,0 +1,3 @@
+C:/Users/saraw/CLionProjects/Image_Filters_App/cmake-build-debug/CMakeFiles/Image_Filters_App.dir
+C:/Users/saraw/CLionProjects/Image_Filters_App/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/saraw/CLionProjects/Image_Filters_App/cmake-build-debug/CMakeFiles/rebuild_cache.dir

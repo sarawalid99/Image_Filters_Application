@@ -9,7 +9,6 @@
 #include <cstdlib>
 #define SIZE 256
 using namespace std;
-unsigned char outputImage[SIZE][SIZE];
 unsigned char photo[SIZE][SIZE];
 unsigned char image[SIZE][SIZE];
 unsigned char shuffled[SIZE][SIZE];
@@ -17,7 +16,34 @@ unsigned char modified_photo[SIZE][SIZE];
 unsigned char NewPhoto[SIZE][SIZE];
 unsigned char photo2[SIZE][SIZE];
 unsigned char newimage[SIZE][SIZE];
+unsigned char input_image[SIZE][SIZE];
+unsigned char output_image[SIZE][SIZE];
+unsigned char modified_image[SIZE][SIZE];
 char photoName[100];
+
+
+void loadImage() {
+    char imageName[100];
+    // Get GRAY image file name
+    cout << "Enter the source image file name: ";
+    cin >> imageName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageName, ".bmp");
+    readGSBMP(imageName, image);
+}
+
+void loadImage3() {
+    char imageName[100];
+    // Get GRAY image file name
+    cout << "Enter the source image file name: ";
+    cin >> imageName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageName, ".bmp");
+    readGSBMP(imageName, input_image);
+}
+
 void sendPhoto () {
     cout << "Please enter file name of the photo to process:\n";
     // Get gray scale image file name
@@ -28,6 +54,18 @@ void sendPhoto () {
     readGSBMP(photoName, photo);
 }
 
+void loadImage2 () {
+    char imageFileName[100];
+    // Get gray image file name
+    cout << "Enter the source image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageFileName, ".bmp");
+    readGSBMP(imageFileName, image);
+}
+
+//*********************************************************
 void toBlacknWhite(){
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
@@ -82,7 +120,6 @@ void detectEdges(){
         for (int j = 0; j < SIZE; ++j) {
             photo2[i][j] = photo[i][j];
         }
-
     }
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
@@ -105,7 +142,6 @@ void detectEdges(){
         }
     }
 }
-
 
 void mirroring(){
     char choice;
@@ -139,6 +175,7 @@ void mirroring(){
             }
         }
     }
+
 }
 void InvertFilter(){
     for (int i = 0 ; i < SIZE; i++){
@@ -192,6 +229,88 @@ void shuffleImage() {//for postioning the quarter{
     }
 }
 
+void EnlargeImage(){
+    cout<<"which quarter do you want to enlarge?"<<endl
+        <<"1. First quarter" <<endl
+        <<"2. Second quarter"<<endl
+        <<"3. Third quarter" <<endl
+        <<"4. Fourth quarter"<<endl;
+    int choice;
+    cin>>choice;
+    if (choice==1){
+        for (int i = 0, l=0; i <= SIZE/2; i++, l+=2) {
+            for (int j = 0, k=0; j< SIZE/2; j++, k+=2) {
+                output_image[l][k]=photo[i][j];
+                output_image[l][k-1]=photo[i][j];
+                output_image[l-1][k]=photo[i][j];
+                output_image[l-1][k-1]=photo[i][j];
+            }
+        }
+    }
+    if (choice==2){
+        for (int i = 0, l=0; i <= SIZE/2; i++, l+=2) {
+            for (int j = SIZE/2, k=0; j< SIZE; j++, k+=2){
+                output_image[l][k]=photo[i][j];
+                output_image[l][k-1]=photo[i][j];
+                output_image[l-1][k]=photo[i][j];
+                output_image[l-1][k-1]=photo[i][j];
+            }
+        }
+    }
+    if (choice == 3){
+        for (int i = SIZE/2, l=0; i <= SIZE; i++, l+=2) {
+            for (int j = 0, k=0; j< SIZE/2; j++, k+=2) {
+                output_image[l][k]=photo[i][j];
+                output_image[l][k-1]=photo[i][j];
+                output_image[l-1][k]=photo[i][j];
+                output_image[l-1][k-1]=photo[i][j];
+            }
+        }
+    }
+    if (choice == 4){
+        for (int i = SIZE/2, l=0; i <= SIZE; i++, l+=2) {
+            for (int j = SIZE/2, k=0; j< SIZE; j++, k+=2) {
+                output_image[l][k]=photo[i][j];
+                output_image[l][k-1]=photo[i][j];
+                output_image[l-1][k]=photo[i][j];
+                output_image[l-1][k-1]=photo[i][j];
+            }
+        }
+    }
+}
+
+void RotateImage()
+{
+    cout<<"Do you want to rotate"<<endl
+        <<"1. 90 degrees"        <<endl
+        <<"2. 180degrees"        <<endl
+        <<"3. 270 degrees"       <<endl;
+
+    int choice;
+    cin>>choice;
+    if (choice == 1){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j< SIZE; j++) {
+                output_image[j][SIZE-i]= input_image[i][j];
+            }
+        }
+    }
+    if (choice == 2){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j< SIZE; j++) {
+                output_image[i][j] = input_image[SIZE-i][SIZE-j];
+            }
+        }
+    }
+    if (choice == 3){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j< SIZE; j++) {
+                output_image[SIZE-j][i] = input_image[i][j];
+            }
+        }
+    }
+}
+
 void merge() {  //filter 3 merge
     cin >> photoName;
     strcat (photoName, ".bmp");
@@ -221,67 +340,32 @@ void lightoDark() {                 // filter 6
     }
 }
 
-void RotateImage() {
-    unsigned char newimage[SIZE][SIZE];
-        int degreeofrotation;
-        cout << "Please Enter The Degree of Rotation to apply:\n";
-        cout << "{90,180,270}\n";
-        cin >> degreeofrotation;
-        if (degreeofrotation == 270) {
-            char imageFileName[100];
-            cout << "Enter the source image file name: ";
-            cin >> imageFileName;
-            strcat(imageFileName, ".bmp");
-            readGSBMP(imageFileName, image);
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = i; j < SIZE; j++) {
-                    swap(image[i][j], image[j][i]);
-                }
-            }
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < (SIZE / 2); j++) {
-                    swap(image[i][j], image[i][SIZE - 1 - j]);
-                }
-            }
-            cout << "Enter the target image file name: ";
-            cin >> imageFileName;
-            strcat(imageFileName, ".bmp");
-            writeGSBMP(imageFileName, image);
-        } else if (degreeofrotation == 180) {
-            char imageFileName[100];
-            cout << "Enter the source image file name: ";
-            cin >> imageFileName;
-            strcat(imageFileName, ".bmp");
-            readGSBMP(imageFileName, image);
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    newimage[i][j] = image[SIZE - i][SIZE - j];
-                }
-            }
-            cout << "Enter the target image file name: ";
-            cin >> imageFileName;
-            strcat(imageFileName, ".bmp");
-            writeGSBMP(imageFileName, newimage);
-        } else if (degreeofrotation == 90) {
-            char imageFileName[100];
-            cout << "Enter the source image file name: ";
-            cin >> imageFileName;
-            strcat(imageFileName, ".bmp");
-            readGSBMP(imageFileName, image);
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    newimage[i][j] = image[j][SIZE - i];
-                }
-            }
-            cout << "Enter the target image file name: ";
-            cin >> imageFileName;
-            strcat(imageFileName, ".bmp");
-            writeGSBMP(imageFileName, newimage);
+void shrinkImage() {
+    int size;
+    int k=0;
+    int l=0;
+    cout<<"Shrink to (1/2), (1/3) or (1/4)? \n";
+    cout<<"if you want a certain size ,enter its inverse \n "; //ex: if you want 1/2 ,enter 2
+    cin>>size;
+    for (int i = 0; i < SIZE; i+=size) {
+        for (int j = 0; j< SIZE; j+=size) {
+            modified_image[k][l]=image[i][j];  // to shrink image dimensions
+
+            l++;
         }
+        l=0;
+        k++;
     }
+}
 
+void blur (){
 
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j< SIZE; j++) {
+            modified_image[i][j]=(image[i][j]+image[i-2][j-2]+image[i-2][j-1]+image[i-2][j]+image[i-2][j+1]+image[i-2][j+1]+image[i-1][j+2]+ image[i-1][j-2]+image[i-1][j+1]+image[i-1][j+1]+image[i-1][j+2]+image[i][j-2]+image[i][j-1]+image[i][j+1]+image[i][j+2]+image[i+1][j-2]+image[i+1][j-1]+image[i+1][j]+image[i+1][j+1]+image[i+1][j+2]+image[i+2][i-2]+image[1+2][j-1]+image[i+2][j]+image[i+2][j+1]+image[i+2][j+2])/25;
+        }}} //take average of matrix 5*5 and store it in modified image to make blur
 
+//*********************************************************
 void savePhoto (){
     char photoName[100];
     // Get gray scale image target file name
@@ -292,6 +376,46 @@ void savePhoto (){
     writeGSBMP(photoName, photo);
 }
 
+
+void savePhoto2 (){
+    char photoName[100];
+    // Get gray scale image target file name
+    cout << "Enter the target image file name: \n";
+    cin >> photoName;
+    // Add to it .bmp extension and load image
+    strcat (photoName, ".bmp");
+    writeGSBMP(photoName, output_image);
+}
+
+void savePhoto3 (){
+    char photoName[100];
+    // Get gray scale image target file name
+    cout << "Enter the target image file name: \n";
+    cin >> photoName;
+    // Add to it .bmp extension and load image
+    strcat (photoName, ".bmp");
+    writeGSBMP(photoName, photo2);
+}
+
+void saveImage () {
+    char modified_imageName[100];
+    // Get gray image target file name
+    cout << "Enter the target image file name: ";
+    cin >> modified_imageName;
+    // Add to it .bmp extension and load image
+    strcat (modified_imageName, ".bmp");
+    writeGSBMP (modified_imageName, modified_image);
+}
+
+void saveImage2 () {
+    char imageFileName[100];
+    // Get  gray image target file name
+    cout << "Enter the target image file name: ";
+    cin >> imageFileName;
+    // Add to it .bmp extension and load image
+    strcat (imageFileName, ".bmp");
+    writeGSBMP(imageFileName, modified_image);
+}
 int main() {
     int selection;
     bool isOn = 1;
@@ -311,7 +435,7 @@ int main() {
                 "11- Shuffle Image\n"
                 "12- Blur Image\n"
                 "13- Save the image to a file\n"
-                "0- Exit";
+                "0- Exit\n";
         cin >> selection;
         if (selection == 1){
             sendPhoto();
@@ -352,24 +476,24 @@ int main() {
             writeGSBMP(photoName, photo2);
         }
         else if (selection == 6){
+            loadImage3();
             RotateImage();
+            savePhoto2();
         }
         else if (selection == 7){
             sendPhoto();
             detectEdges();
-            char photoName[100];
-            // Get gray scale image target file name
-            cout << "Enter the target image file name: \n";
-            cin >> photoName;
-            // Add to it .bmp extension and load image
-            strcat (photoName, ".bmp");
-            writeGSBMP(photoName, photo2);
+            savePhoto3();
         }
         else if (selection == 8){
-
+            sendPhoto();
+            EnlargeImage();
+            savePhoto2();
         }
         else if (selection == 9){
-
+            loadImage();
+            shrinkImage();
+            saveImage();
         }
         else if (selection == 10){
             sendPhoto();
@@ -395,7 +519,9 @@ int main() {
 
         }
         else if (selection == 12){
-
+            loadImage2();
+            blur();
+            saveImage2();
         }
         else if (selection == 13){
             savePhoto();

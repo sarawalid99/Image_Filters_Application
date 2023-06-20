@@ -1,6 +1,6 @@
 # Image_Filters
 
-Made by : [**Hadeer Abdelnasser**](https://github.com/hadeerabdelnaser) - [**Sara Walid**](https://github.com/sarawalid99) - [**Howida Abdelhalim**](https://github.com/howidaabdelhalim)
+Made by : [**Sara Walid**](https://github.com/sarawalid99) - [**Hadeer Abdelnasser**](https://github.com/hadeerabdelnaser) - [**Howida Abdelhalim**](https://github.com/howidaabdelhalim)
 
 Requested by:  Dr. Mohammed El-Ramly in Structured Programming course.
 
